@@ -15,12 +15,12 @@ before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - export GIT_SHA=`git rev-parse --short HEAD`
 - echo "Building commit $GIT_SHA"
-- chmod -R +x /bin
 jobs:
   include:
   - stage: tests
     name: Compelete test
     script:
+    - chmod -R +x /bin
     - bin/up
     - bin/build
     - bin/test
