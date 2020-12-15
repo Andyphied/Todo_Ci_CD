@@ -24,45 +24,45 @@ jobs:
   - stage: push_server
     script:
     - docker-compose up backend
-    - docker tag todo_backend:latest andyphied/todo_backend:$GIT_SHA
-    - docker push andyphied/todo_backend:$GIT_SHA
-    - docker tag todo_backend:latest andyphied/todo_backend:$TRAVIS_BRANCH
+    - docker tag todo_ci_cd_backend:latest andyphied/todo_ci_cd_backend:$GIT_SHA
+    - docker push andyphied/todo_ci_cd_backend:$GIT_SHA
+    - docker tag todo_ci_cd_backend:latest andyphied/todo_ci_cd_backend:$TRAVIS_BRANCH
     deploy:
     - provider: script
-      script: docker push andyphied/todo_backend:$TRAVIS_BRANCH
+      script: docker push andyphied/todo_ci_cd_backend:$TRAVIS_BRANCH
       on:
         branch: master
     - provider: script
-      script: docker push andyphied/todo_backend:$TRAVIS_TAG
+      script: docker push andyphied/todo_ci_cd_backend:$TRAVIS_TAG
       on:
         tags: true
   - stage: push_frontend
     script:
     - docker-compose up frontend
-    - docker tag todo_frontend:latest andyphied/todo_frontend:$GIT_SHA
-    - docker push andyphied/todo_frontend:$GIT_SHA
-    - docker tag todo_frontend:latest andyphied/todo_frontend:$TRAVIS_BRANCH
+    - docker tag todo_ci_cd_frontend:latest andyphied/todo_ci_cd_frontend:$GIT_SHA
+    - docker push andyphied/todo_ci_cd_frontend:$GIT_SHA
+    - docker tag todo_ci_cd_frontend:latest andyphied/todo_ci_cd_frontend:$TRAVIS_BRANCH
     deploy:
     - provider: script
-      script: docker push andyphied/todo_frontend:$TRAVIS_BRANCH
+      script: docker push andyphied/todo_ci_cd_frontend:$TRAVIS_BRANCH
       on:
         branch: master
     - provider: script
-      script: docker push andyphied/todo_frontend:$TRAVIS_TAG
+      script: docker push andyphied/todo_ci_cd_frontend:$TRAVIS_TAG
       on:
         tags: true
   - stage: push_search
     script:
     - docker-compose up search
-    - docker tag todo_search:latest andyphied/todo_search:$GIT_SHA
-    - docker push andyphied/todo_search:$GIT_SHA
-    - docker tag todo_search:latest andyphied/todo_search:$TRAVIS_BRANCH
+    - docker tag todo_ci_cd_search:latest andyphied/todo_ci_cd_search:$GIT_SHA
+    - docker push andyphied/todo_ci_cd_search:$GIT_SHA
+    - docker tag todo_ci_cd_search:latest andyphied/todo_ci_cd_search:$TRAVIS_BRANCH
     deploy:
     - provider: script
-      script: docker push andyphied/todo_search:$TRAVIS_BRANCH
+      script: docker push andyphied/todo_ci_cd_search:$TRAVIS_BRANCH
       on:
         branch: master
     - provider: script
-      script: docker push andyphied/todo_search:$TRAVIS_TAG
+      script: docker push andyphied/todo_ci_cd_search:$TRAVIS_TAG
       on:
         tags: true
