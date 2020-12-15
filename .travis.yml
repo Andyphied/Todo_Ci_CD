@@ -17,6 +17,7 @@ before_install:
 - echo "Building commit $GIT_SHA"
 - docker network create todo__default
 - docker volume create --name=todo_backend_node_modules
+- docker volume create --name=todo_frontend_node_modules
 jobs:
   include:
   - stage: push_server
