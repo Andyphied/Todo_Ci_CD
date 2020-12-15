@@ -23,7 +23,7 @@ jobs:
   include:
   - stage: push_server
     script:
-    - docker-compose up backend
+    - docker-compose build backend
     - docker tag todo_ci_cd_backend:latest andyphied/todo_ci_cd_backend:$GIT_SHA
     - docker push andyphied/todo_ci_cd_backend:$GIT_SHA
     - docker tag todo_ci_cd_backend:latest andyphied/todo_ci_cd_backend:$TRAVIS_BRANCH
@@ -38,7 +38,7 @@ jobs:
         tags: true
   - stage: push_frontend
     script:
-    - docker-compose up frontend
+    - docker-compose build frontend
     - docker tag todo_ci_cd_frontend:latest andyphied/todo_ci_cd_frontend:$GIT_SHA
     - docker push andyphied/todo_ci_cd_frontend:$GIT_SHA
     - docker tag todo_ci_cd_frontend:latest andyphied/todo_ci_cd_frontend:$TRAVIS_BRANCH
@@ -53,7 +53,7 @@ jobs:
         tags: true
   - stage: push_search
     script:
-    - docker-compose up search
+    - docker-compose build search
     - docker tag todo_ci_cd_search:latest andyphied/todo_ci_cd_search:$GIT_SHA
     - docker push andyphied/todo_ci_cd_search:$GIT_SHA
     - docker tag todo_ci_cd_search:latest andyphied/todo_ci_cd_search:$TRAVIS_BRANCH
