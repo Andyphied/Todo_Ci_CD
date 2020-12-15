@@ -4,7 +4,6 @@ services:
 env:
   global:
     - DOCKER_COMPOSE_VERSION=1.27.4
-    - secret: 
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -13,3 +12,64 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker --version
   - docker-compose version
+  - echo "Login into Docker Hub"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - export GIT_SHA=`git rev-parse --short HEAD`
+  - echo "Building commit $GIT_SHA"
+
+jobs:
+  include:
+    - stage: tests
+      name: Compelete test
+      script: 
+        - bin/up
+        - bin/build
+        - bin/test
+    - stage: push_server
+      script:
+        - docker-compose up backend
+        - docker tag todo_backend:latest andyphied/todo_backend:$GIT_SHA
+        - docker push andyphied/todo_backend:$GIT_SHA
+        - docker tag todo_backend:latest andyphied/todo_backend:$TRAVIS_BRANCH
+      deploy:
+        - provider: script
+          script: docker push andyphied/todo_backend:$TRAVIS_BRANCH
+          on:
+           branch: master
+        - provider: script
+          script: docker push andyphied/todo_backend:$TRAVIS_TAG
+          on:
+            tags: true
+    - stage: push_frontend
+      script:
+        - docker-compose up frontend
+        - docker tag todo_frontend:latest andyphied/todo_frontend:$GIT_SHA
+        - docker push andyphied/todo_frontend:$GIT_SHA
+        - docker tag todo_frontend:latest andyphied/todo_frontend:$TRAVIS_BRANCH
+      deploy:
+        - provider: script
+          script: docker push andyphied/todo_frontend:$TRAVIS_BRANCH
+          on:
+           branch: master
+        - provider: script
+          script: docker push andyphied/todo_frontend:$TRAVIS_TAG
+          on:
+            tags: true
+    - stage: push_search
+      script:
+        - docker-compose up search
+        - docker tag todo_search:latest andyphied/todo_search:$GIT_SHA
+        - docker push andyphied/todo_search:$GIT_SHA
+        - docker tag todo_search:latest andyphied/todo_search:$TRAVIS_BRANCH
+      deploy:
+        - provider: script
+          script: docker push andyphied/todo_search:$TRAVIS_BRANCH
+          on:
+           branch: master
+        - provider: script
+          script: docker push andyphied/todo_search:$TRAVIS_TAG
+          on:
+            tags: true
+
+      
+
